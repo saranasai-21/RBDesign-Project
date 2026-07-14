@@ -131,9 +131,3 @@ RBDesign-Project/
 ├── render.yaml              # Render deployment configuration
 └── package.json             # Dependencies & Scripts
 ```
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License.
