@@ -1,78 +1,119 @@
 # LoadFlow — Freight Brokerage Operations Suite
 
-A production-grade multi-tenant freight brokerage platform with RBAC, load lifecycle management, carrier compliance, rate confirmations, and POD uploads.
+A production-grade, multi-tenant freight brokerage platform designed to streamline logistics operations. LoadFlow connects Shippers, Freight Brokers, and Carriers into a single unified ecosystem with robust Role-Based Access Control (RBAC), load lifecycle management, carrier compliance tracking, rate confirmations, and Proof of Delivery (POD) uploads.
 
-## Tech Stack
+---
+
+## 🌟 Key Features
+
+### 🔐 Multi-Tenant Architecture & RBAC
+- **Three Core Organization Types:** Brokerages, Carrier/Trucking Companies, and Shippers.
+- **Strict Data Isolation:** Users can only view and interact with data (loads, staff, compliance) that belongs to their specific organization.
+- **Dynamic Roles:** Organizations can create custom roles with granular permissions (e.g., `load.create`, `load.view`, `staff.manage`, `compliance.manage`).
+
+### 📦 Comprehensive Load Lifecycle Management
+- **Full State Machine:** Loads progress through strict statuses: 
+  `Posted` → `Carrier Assigned` → `Rate Confirmed` → `Dispatched` → `In Transit` → `Delivered` → `POD Verified` → `Closed`.
+- **Real-Time Dashboards:** Tailored views for Brokers (to manage load boards), Carriers (to view assigned routes), and Shippers (to track active shipments).
+
+### ✅ Automated Carrier Compliance
+- **Compliance Tracking:** Monitors MC/DOT numbers, insurance expiry dates, and authority statuses.
+- **Safety Flags:** Automatically flags loads if they are assigned to a carrier with expired insurance or suspended authority, preventing dispatch until compliance is resolved.
+
+### 💲 Rate Confirmations & Document Management
+- **Versioned Agreements:** Brokers can issue Rate Confirmations.
+- **Dual-Party Signing:** Carriers must digitally sign/confirm the rate before a load can be dispatched.
+- **POD Uploads:** Carriers can upload Proof of Delivery documents directly to the load record, advancing the status to `POD Verified`.
+
+### 🎨 Premium UI/UX
+- **Dynamic Dashboards:** Built with Chart.js for beautiful, interactive doughnut charts visualizing load distributions.
+- **Modern Typography:** Uses Google's `Outfit` and `Plus Jakarta Sans` for a crisp, high-resolution aesthetic.
+- **Micro-Animations:** Fluid CSS keyframe animations and animated FontAwesome icons ensure the interface feels responsive and alive.
+
+---
+
+## 💻 Tech Stack
 
 - **Backend:** Node.js, Express.js
 - **Database:** MongoDB Atlas (Mongoose ODM)
-- **Auth:** JWT + bcrypt
-- **Frontend:** Vanilla JS SPA with Chart.js visualizations
-- **Icons:** FontAwesome 6 (with animated icons)
-- **Fonts:** Outfit + Plus Jakarta Sans (Google Fonts)
+- **Authentication:** JSON Web Tokens (JWT) & bcrypt for secure password hashing
+- **Frontend:** Vanilla JavaScript SPA (Single Page Application)
+- **Visuals:** Chart.js, FontAwesome 6, Google Fonts
+- **Deployment:** Render (Cloud Application Hosting)
 
-## Features
+---
 
-- 🔐 **Multi-Tenant RBAC** — Broker, Carrier, and Shipper roles with org-scoped data isolation
-- 📦 **Load Lifecycle** — Full state machine: Posted → Carrier Assigned → Rate Confirmed → Dispatched → In Transit → Delivered → POD Verified → Closed
-- ✅ **Carrier Compliance** — Insurance expiry tracking, authority status validation, compliance flags on load assignment
-- 💲 **Rate Confirmations** — Versioned rate agreements with dual-party signing (Broker + Carrier)
-- 📄 **POD Upload** — Proof of Delivery document upload with automatic status progression
-- 📊 **Visual Dashboards** — Chart.js doughnut charts, animated stat cards, and premium UI
+## 🚀 Quick Start (Local Development)
 
-## Quick Start
+### Prerequisites
+- Node.js (v18+)
+- MongoDB cluster (local or MongoDB Atlas)
 
+### 1. Clone & Install
 ```bash
-# Install dependencies
+git clone https://github.com/saranasai-21/RBDesign-Project.git
+cd RBDesign-Project
 npm install
+```
 
-# Set environment variables (create .env file)
-MONGODB_URI="mongodb+srv://..."
-JWT_SECRET="your_secret_key"
+### 2. Environment Variables
+Create a `.env` file in the root directory:
+```env
+MONGODB_URI="mongodb+srv://<username>:<password>@cluster.mongodb.net/loadflow"
+JWT_SECRET="your_super_secret_jwt_key_here"
+```
 
-# Seed the database with demo data
+### 3. Database Seeding
+To populate the database with demo organizations, roles, and loads:
+```bash
 npm run seed
+```
 
-# Start the server
+### 4. Start the Server
+```bash
 npm start
 ```
+The application will be available at `http://localhost:3000`.
 
-## Demo Accounts
+---
 
-| Role | Username | Password |
-|------|----------|----------|
-| Broker Admin | `brokeradmin` | `password123` |
-| Dispatcher | `dispatcher1` | `password123` |
-| Carrier Admin | `carrieradmin` | `password123` |
-| Driver | `driver1` | `password123` |
-| Shipper | `shipperuser` | `password123` |
+## 🌐 Deployment (Render)
 
-## API Endpoints
+This application is configured for seamless deployment on [Render](https://render.com).
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/auth/register` | Register new org + admin |
-| POST | `/api/auth/login` | Login |
-| GET | `/api/auth/me` | Current user context |
-| GET/POST | `/api/loads` | List / Create loads |
-| PUT | `/api/loads/:id/assign` | Assign carrier to load |
-| PUT | `/api/loads/:id/status` | Update load status |
-| GET/PUT | `/api/compliance` | Carrier compliance CRUD |
-| POST | `/api/rates/:load_id` | Issue rate confirmation |
-| PUT | `/api/rates/:load_id/:rate_id/confirm` | Sign rate confirmation |
-| POST | `/api/loads/:id/pod` | Upload POD document |
-| GET/POST | `/api/staff` | Manage org staff |
-| GET/POST/DELETE | `/api/roles` | Manage custom roles |
+1. Connect your GitHub repository to a new Render **Web Service**.
+2. **Build Command:** `npm install`
+3. **Start Command:** `node server.js`
+4. Add the `MONGODB_URI` and `JWT_SECRET` as environment variables.
+5. Deploy!
 
-## Project Structure
+*(Note: Ensure your MongoDB Atlas Network Access is set to `0.0.0.0/0` to allow Render's dynamic IPs to connect).*
 
-```
-RBDesign/
-├── public/                  # Frontend SPA
-│   ├── index.html
-│   ├── styles.css
-│   ├── app.js
-│   └── components/
+---
+
+## 🔑 Demo Accounts
+
+If you have run the seed script, you can log in with the following test accounts (Password for all: `password123`):
+
+| Organization Type | Role | Username |
+|-------------------|------|----------|
+| **Brokerage** | Admin | `brokeradmin` |
+| **Brokerage** | Dispatcher | `dispatcher1` |
+| **Carrier** | Admin | `carrieradmin` |
+| **Carrier** | Driver | `driver1` |
+| **Shipper** | User | `shipperuser` |
+
+---
+
+## 📂 Project Structure
+
+```text
+RBDesign-Project/
+├── public/                  # Frontend SPA Assets
+│   ├── index.html           # Main entry point
+│   ├── styles.css           # Global CSS (Variables, Animations, Layout)
+│   ├── app.js               # Core router and state management
+│   └── components/          # UI Components
 │       ├── auth.js
 │       ├── broker-dashboard.js
 │       ├── carrier-dashboard.js
@@ -80,34 +121,19 @@ RBDesign/
 │       ├── admin-panel.js
 │       ├── load-detail.js
 │       └── modals.js
-├── server/
-│   ├── database.js          # MongoDB connection + constants
-│   ├── seed.js              # Database seeding script
-│   ├── middleware/
-│   │   ├── auth.js          # JWT authentication
-│   │   └── rbac.js          # Permission + org scoping
-│   ├── models/              # Mongoose schemas
-│   │   ├── Organization.js
-│   │   ├── User.js
-│   │   ├── Role.js
-│   │   ├── Load.js
-│   │   ├── LoadAudit.js
-│   │   ├── RateConfirmation.js
-│   │   ├── CarrierCompliance.js
-│   │   └── PermissionLog.js
-│   └── routes/
-│       ├── auth.routes.js
-│       ├── staff.routes.js
-│       ├── roles.routes.js
-│       ├── loads.routes.js
-│       ├── compliance.routes.js
-│       ├── rates.routes.js
-│       └── pod.routes.js
+├── server/                  # Backend API
+│   ├── database.js          # MongoDB connection logic
+│   ├── seed.js              # DB Seeding utility
+│   ├── middleware/          # Express middlewares (Auth, RBAC)
+│   ├── models/              # Mongoose Data Models (User, Load, Org, etc.)
+│   └── routes/              # API Route Handlers
 ├── server.js                # Express app entry point
-├── package.json
-└── .gitignore
+├── render.yaml              # Render deployment configuration
+└── package.json             # Dependencies & Scripts
 ```
 
-## License
+---
 
-MIT
+## 📄 License
+
+This project is licensed under the MIT License.
