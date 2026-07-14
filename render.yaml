@@ -1,0 +1,16 @@
+{
+  "name": "loadflow",
+  "env": "node",
+  "buildCommand": "npm install",
+  "startCommand": "npm start",
+  "envVars": [
+    {
+      "key": "MONGODB_URI",
+      "generateValue": false
+    },
+    {
+      "key": "JWT_SECRET",
+      "generateValue": true
+    }
+  ]
+}
